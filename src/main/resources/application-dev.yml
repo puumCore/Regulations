@@ -1,0 +1,30 @@
+server:
+  error:
+    include-message: ALWAYS
+    include-binding-errors: ALWAYS
+    include-stacktrace: NEVER
+    include-exception: false
+  servlet:
+    context-path: /kws-regulations/api/v1
+    application-display-name: KWS Regulations
+  port: 8080
+
+spring:
+  gson:
+    pretty-printing: true
+
+  jackson:
+    default-property-inclusion: NON_NULL
+    time-zone: Africa/Nairobi
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: developer
+      password: sN3mQtF455
+      authentication-database: admin
+      database: kws_regulations_sys
+
+  application:
+    name: KWS Regulations
