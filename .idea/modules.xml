@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Regulations.iml" filepath="$PROJECT_DIR$/.idea/modules/Regulations.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Regulations.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Regulations.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.r_n_m.kws.Regulations.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.r_n_m.kws.Regulations.main.iml" />
     </modules>
   </component>
 </project>

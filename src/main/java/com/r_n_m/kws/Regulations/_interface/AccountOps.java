@@ -2,6 +2,7 @@ package com.r_n_m.kws.Regulations._interface;
 
 import com.r_n_m.kws.Regulations._entities.Account;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.bson.types.ObjectId;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public interface AccountOps extends UserDetailsService {
      */
     Account get_user(String username);
 
+    Account get_user(ObjectId userId);
+
     Account create_account(Account account);
 
     /**
@@ -35,7 +38,7 @@ public interface AccountOps extends UserDetailsService {
      */
     Account update_account(Account targetAccount);
 
-    Boolean delete_account(String username);
+    boolean delete_account(String username);
 
     Boolean the_username_already_exists(String username);
 

@@ -6,7 +6,6 @@ import com.r_n_m.kws.Regulations._entities.Account;
 import com.r_n_m.kws.Regulations._exception.BadRequestException;
 import com.r_n_m.kws.Regulations._exception.FailureException;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "iam")
 @Slf4j
-@RequiredArgsConstructor
 public class AuthCtrl {
 
-    private final AccountOps accountOps;
+    @Autowired
+    private AccountOps accountOps;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -36,6 +35,11 @@ public class AuthCtrl {
     @ResponseStatus(HttpStatus.CREATED)
     public void add_first_user(@RequestBody Account account) {
         log.info("body = {}", account);
+
+        final var warning = account.get_warning();
+        if (warning != null) {
+            throw new BadRequestException(warning);
+        }
 
         if (!accountOps.get_accounts().isEmpty()) {
             throw new BadRequestException("Sorry, this feature can only be used on fresh use.");
