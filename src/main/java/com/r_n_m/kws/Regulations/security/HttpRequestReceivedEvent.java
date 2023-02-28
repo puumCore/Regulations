@@ -23,13 +23,13 @@ public class HttpRequestReceivedEvent extends AuditApplicationEvent {
 
     private static Map<String, Object> details(HttpServletRequest request, String correlationId) {
         SortedMap<String, Object> details = new TreeMap<>();
-        details.put("1 http.correlationId", correlationId);
-        details.put("2 http.method", request.getMethod());
-        details.put("3 http.servletPath", request.getServletPath());
-        details.put("4 http.remoteHost", request.getRemoteHost());
-        details.put("5 http.remotePort", request.getRemotePort());
-        details.put("6 http.requestURL", request.getRequestURL());
-        details.put("7 http.token", request.getHeader("Authorization") == null ? "Token not found" : "Token Found");
+        details.put("correlationId", correlationId);
+        details.put("method", request.getMethod());
+        details.put("servletPath", request.getServletPath());
+        details.put("remoteHost", request.getRemoteHost());
+        details.put("remotePort", request.getRemotePort());
+        details.put("requestURL", request.getRequestURL());
+        details.put("token", request.getHeader("Authorization") == null ? "Token not found" : "Token Found");
         // other details here
         return details;
     }

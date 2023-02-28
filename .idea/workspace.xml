@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Functionality: Accounts">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Regulations.main.iml" beforeDir="false" />
+    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Save Logs">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/AuditLog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_repositories/AuditLogRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AccountCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AccountCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/HttpRequestReceivedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/HttpRequestReceivedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/LoggingAuditEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/LoggingAuditEventListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +53,13 @@
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -113,6 +122,14 @@
       <option name="presentableId" value="Default" />
       <updated>1677507051113</updated>
     </task>
+    <task id="LOCAL-00001" summary="Delete .gradle directory">
+      <created>1677565698845</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1677565698845</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,5 +142,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Functionality: Accounts" />
+    <MESSAGE value="Delete .gradle directory" />
+    <MESSAGE value="Save Logs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Save Logs" />
   </component>
 </project>

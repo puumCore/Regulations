@@ -152,7 +152,7 @@ public class AccountCtrl extends Assistant {
     }
 
     @DeleteMapping
-    Account delete(@RequestParam @NonNull String username) {
+    Account delete_user(@RequestParam @NonNull String username) {
         final var account = accountOps.get_user(username);
         if (account == null) {
             throw new BadRequestException("The username is already taken, please consider a new one");

@@ -1,24 +1,43 @@
 package com.r_n_m.kws.Regulations.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.gson.GsonBuilder;
+import com.r_n_m.kws.Regulations._custom.Assistant;
+import com.r_n_m.kws.Regulations._entities.AuditLog;
+import com.r_n_m.kws.Regulations._repositories.AuditLogRepository;
+import com.r_n_m.kws.Regulations._util.DateUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.listener.AuditApplicationEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoggingAuditEventListener {
+@Slf4j(topic = "AuditLogger")
+public class LoggingAuditEventListener extends Assistant {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("AuditLogger");
+    @Autowired
+    private AuditLogRepository auditLogRepository;
+
 
     @EventListener
     public void on(AuditApplicationEvent event) {
-        var backup = MDC.getCopyOfContextMap();
-        MDC.put("event.type", event.getAuditEvent().getType());
-        MDC.put("event.principal", event.getAuditEvent().getPrincipal());
+        final var backup = MDC.getCopyOfContextMap();
+        final var auditEvent = event.getAuditEvent();
+        MDC.put("event.type", auditEvent.getType());
+        MDC.put("event.principal", auditEvent.getPrincipal());
 
-        LOGGER.info("An Audit Event was received: {}", event);
+        final var auditLog = new AuditLog();
+        auditLog.setTimestamp(DateFormatUtils.format(DateUtils.asDate(auditEvent.getTimestamp().atZone(clock.getZone()).toLocalDateTime()), "yyyy-MMM-dd HH:mm:ss"));
+        auditLog.setPrincipal(auditEvent.getPrincipal());
+        auditLog.setType(auditEvent.getType());
+        auditLog.setData(new GsonBuilder().setPrettyPrinting().create().toJsonTree(auditEvent.getData()));
+        try {
+            auditLogRepository.insert(auditLog);
+        } catch (Exception e) {
+            log.error("Failed to log audit", e);
+        }
 
         if (backup != null) {
             MDC.setContextMap(backup);
