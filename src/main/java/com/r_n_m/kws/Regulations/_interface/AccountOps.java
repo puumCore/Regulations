@@ -1,12 +1,13 @@
 package com.r_n_m.kws.Regulations._interface;
 
 import com.r_n_m.kws.Regulations._entities.Account;
+import com.r_n_m.kws.Regulations._models.Forms;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.bson.types.ObjectId;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Puum Core (Mandela Murithi)<br>
@@ -28,7 +29,7 @@ public interface AccountOps extends UserDetailsService {
      */
     Account get_user(String username);
 
-    Account get_user(ObjectId userId);
+    Account get_user(UUID uuid);
 
     Account create_account(Account account);
 
@@ -42,7 +43,7 @@ public interface AccountOps extends UserDetailsService {
 
     Boolean the_username_already_exists(String username);
 
-    Boolean the_password_has_been_updated(String newPassword, String username);
+    Boolean the_password_has_been_updated(String username, String newPassword);
 
     List<Account> get_accounts();
 
@@ -50,9 +51,9 @@ public interface AccountOps extends UserDetailsService {
 
     Set<String> get_account_search_suggestions();
 
-    Boolean update_authorization_status(String username, boolean authorize);
+    Boolean update_authorization_status(Forms.Auth auth);
 
-    Boolean update_authentication_status(String username, boolean authenticate);
+    Boolean update_authentication_status(Forms.Auth auth);
 
     default String get_password() {
         return RandomStringUtils.randomAlphanumeric(8, 12);

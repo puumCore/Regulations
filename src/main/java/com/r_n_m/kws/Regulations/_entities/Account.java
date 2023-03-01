@@ -5,9 +5,10 @@ import com.r_n_m.kws.Regulations._enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.UUID;
 
 /**
  * @author Puum Core (Mandela Murithi)<br>
@@ -24,9 +25,9 @@ public class Account {
 
     public static final String collection = "accounts";
 
-    @MongoId
+    @Id
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private ObjectId accountId;
+    private UUID accountId;
 
     private String name;
     private String phone;
@@ -59,8 +60,36 @@ public class Account {
         return null;
     }
 
-    public String getAccountId() {
-        return accountId != null ? accountId.toHexString() : null;
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account account)) return false;
+
+        if (isAuthenticated() != account.isAuthenticated()) return false;
+        if (isAuthorised() != account.isAuthorised()) return false;
+        if (getAccountId() != null ? !getAccountId().equals(account.getAccountId()) : account.getAccountId() != null)
+            return false;
+        if (getName() != null ? !getName().equals(account.getName()) : account.getName() != null) return false;
+        if (getPhone() != null ? !getPhone().equals(account.getPhone()) : account.getPhone() != null) return false;
+        if (getRole() != account.getRole()) return false;
+        if (getUsername() != null ? !getUsername().equals(account.getUsername()) : account.getUsername() != null)
+            return false;
+        return getPassword() != null ? getPassword().equals(account.getPassword()) : account.getPassword() == null;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public int hashCode() {
+        int result = getAccountId() != null ? getAccountId().hashCode() : 0;
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getPhone() != null ? getPhone().hashCode() : 0);
+        result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
+        result = 31 * result + (getUsername() != null ? getUsername().hashCode() : 0);
+        result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
+        result = 31 * result + (isAuthenticated() ? 1 : 0);
+        result = 31 * result + (isAuthorised() ? 1 : 0);
+        return result;
     }
 
 }

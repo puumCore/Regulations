@@ -1,6 +1,5 @@
 package com.r_n_m.kws.Regulations._api;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.r_n_m.kws.Regulations._entities.Account;
 import com.r_n_m.kws.Regulations._exception.BadRequestException;
@@ -23,13 +22,36 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "iam")
-@Slf4j
+@Slf4j(topic = "Controller: IAM")
 public class AuthCtrl {
 
     @Autowired
     private AccountOps accountOps;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @PostMapping(path = "/self-register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    void self_registration(@RequestBody Account account) {
+        log.info("body = {}", account);
+
+        final var warning = account.get_warning();
+        if (warning != null) {
+            throw new BadRequestException(warning);
+        }
+
+        if (accountOps.the_username_already_exists(account.getUsername())) {
+            throw new BadRequestException("The username is already taken, please consider a new one");
+        }
+
+        account.setAuthenticated(false);
+        account.setAuthorised(true);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+
+        if (accountOps.create_account(account) == null) {
+            throw new FailureException("Unable to self register the user");
+        }
+    }
 
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -48,6 +70,7 @@ public class AuthCtrl {
         account.setAuthenticated(true);
         account.setAuthorised(true);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+
         account = accountOps.create_account(account);
         if (account == null) {
             throw new FailureException("Something wrong happened and the account was NOT be saved");
@@ -56,12 +79,13 @@ public class AuthCtrl {
 
     @PostMapping(value = "/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public String reset_account_password(@RequestBody String body) {
-        System.out.println("body = " + body);
-        JsonElement jsonElement = JsonParser.parseString(body);
+        log.info("body = {}", body);
+
+        var jsonElement = JsonParser.parseString(body);
         if (jsonElement.isJsonNull() || !jsonElement.isJsonObject()) {
             throw new BadRequestException("No valid body has been provided");
         }
-        JsonElement username = jsonElement.getAsJsonObject().get("username");
+        var username = jsonElement.getAsJsonObject().get("username");
         if (username == null) {
             throw new BadRequestException("No username has been provided");
         }
@@ -70,7 +94,7 @@ public class AuthCtrl {
             throw new BadRequestException("No user has the provided username");
         }
         var newPassword = accountOps.get_password();
-        if (accountOps.the_password_has_been_updated(passwordEncoder.encode(newPassword), account.getUsername())) {
+        if (accountOps.the_password_has_been_updated(account.getUsername(), passwordEncoder.encode(newPassword))) {
             return newPassword;
         } else {
             throw new FailureException("Failed to update your account password, please ignore the password sent to your email address.");

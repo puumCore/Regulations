@@ -4,9 +4,10 @@ import com.google.gson.JsonElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +15,8 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Document(collection = "logs")
 public class AuditLog {
 
-    @MongoId
-    private ObjectId logId;
+    @Id
+    private UUID logId;
     private String timestamp;
     private String principal;
     private String type;

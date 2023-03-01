@@ -8,21 +8,19 @@ import com.r_n_m.kws.Regulations._exception.FailureException;
 import com.r_n_m.kws.Regulations._exception.NotFoundException;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
 import com.r_n_m.kws.Regulations._models.Forms;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "account", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,7 +42,7 @@ public class AccountCtrl extends Assistant {
     @GetMapping("/object-model")
     Account get_model() {
         var account = new Account();
-        account.setAccountId(new ObjectId());
+        account.setAccountId(UUID.randomUUID());
         account.setName("John Doe");
         account.setPhone("0716866432");
         account.setRole(Role.GATE);
@@ -56,36 +54,11 @@ public class AccountCtrl extends Assistant {
         return account;
     }
 
-    @PostMapping(path = "/self-register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    void self_registration(@RequestBody Account account) {
-        log.info("body = {}", account);
+    @PutMapping(params = "id", consumes = MediaType.APPLICATION_JSON_VALUE)
+    Account update_info(@RequestBody Account account, @RequestParam UUID id) {
+        log.info("body = {}, id = {}", account, id);
 
-        final var warning = account.get_warning();
-        if (warning != null) {
-            throw new BadRequestException(warning);
-        }
-
-        if (accountOps.the_username_already_exists(account.getUsername())) {
-            throw new BadRequestException("The username is already taken, please consider a new one");
-        }
-
-        account.setAuthorised(false);
-        account.setAuthenticated(false);
-        if (accountOps.create_account(account) == null) {
-            throw new FailureException("Unable to self register the user");
-        }
-    }
-
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    Account update_info(@RequestBody Account account) {
-        log.info("body = {}", account);
-
-        if (account.getAccountId() == null) {
-            throw new BadRequestException("Please return the provided account ID");
-        }
-
-        final var user = accountOps.get_user(account.getAccountId());
+        final var user = accountOps.get_user(id);
         if (user == null) {
             throw new NotFoundException("The target user account could not be found. Maybe it doesn't exist or the account lacks authorization to interact with the system");
         }
@@ -104,9 +77,17 @@ public class AccountCtrl extends Assistant {
         }
         if (account.getRole() == null) {
             account.setRole(user.getRole());
+        } else {
+            if (Arrays.stream(Role.values()).noneMatch(role -> account.getRole().equals(role))) {
+                throw new BadRequestException("Unknown account role provided");
+            }
         }
         if (account.getUsername() == null) {
             account.setUsername(user.getUsername());
+        } else {
+            if (accountOps.the_username_already_exists(account.getUsername())) {
+                throw new BadRequestException("The username is already taken, please consider a new one");
+            }
         }
         if (account.getPassword() == null) {
             account.setPassword(user.getPassword());
@@ -116,38 +97,48 @@ public class AccountCtrl extends Assistant {
 
         account.setAuthorised(user.isAuthorised());
         account.setAuthenticated(user.isAuthenticated());
+        account.setAccountId(user.getAccountId());
 
-        final var updatedAccount = accountOps.update_account(account);
-        if (updatedAccount == null) {
-            throw new FailureException("User account info has not been updated");
+        if (!user.equals(account)) {
+            final var updatedAccount = accountOps.update_account(account);
+            if (updatedAccount == null) {
+                throw new FailureException("User account info has not been updated");
+            }
+            return updatedAccount;
         }
 
-        return updatedAccount;
+        return account;
     }
 
-    @PutMapping(path = "/authorization", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/authorization", consumes = MediaType.APPLICATION_JSON_VALUE)
     void update_authorization(@RequestBody Forms.Auth authForm) {
         log.info("body = {}", authForm);
 
-        if (accountOps.the_username_already_exists(authForm.username())) {
-            throw new BadRequestException("The username is already taken, please consider a new one");
+        var account = accountOps.get_user(authForm.username());
+        if (account == null) {
+            throw new NotFoundException("No such user found");
         }
 
-        if (!accountOps.update_authorization_status(authForm.username(), authForm.enable())) {
-            throw new FailureException("Unable to allow the user to be authorised");
+        if (account.isAuthorised() != authForm.enable()) {
+            if (!accountOps.update_authorization_status(authForm)) {
+                throw new FailureException("Unable to allow the user to be authorised");
+            }
         }
     }
 
-    @PutMapping(path = "/authentication", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/authentication", consumes = MediaType.APPLICATION_JSON_VALUE)
     void update_authentication(@RequestBody Forms.Auth authForm) {
         log.info("body = {}", authForm);
 
-        if (accountOps.the_username_already_exists(authForm.username())) {
-            throw new BadRequestException("The username is already taken, please consider a new one");
+        var account = accountOps.get_user(authForm.username());
+        if (account == null) {
+            throw new NotFoundException("No such user found");
         }
 
-        if (!accountOps.update_authentication_status(authForm.username(), authForm.enable())) {
-            throw new FailureException("Unable to allow the user to be authenticated");
+        if (account.isAuthenticated() != authForm.enable()) {
+            if (!accountOps.update_authentication_status(authForm)) {
+                throw new FailureException("Unable to allow the user to be authenticated");
+            }
         }
     }
 
@@ -155,7 +146,7 @@ public class AccountCtrl extends Assistant {
     Account delete_user(@RequestParam @NonNull String username) {
         final var account = accountOps.get_user(username);
         if (account == null) {
-            throw new BadRequestException("The username is already taken, please consider a new one");
+            throw new NotFoundException("No such user found");
         }
 
         if (!accountOps.delete_account(username)) {
@@ -166,22 +157,8 @@ public class AccountCtrl extends Assistant {
     }
 
     @GetMapping
-    List<Account> get_users() {
-        return accountOps.get_accounts();
-    }
-
-    @GetMapping(params = "q")
-    List<Account> get_users(@RequestParam(defaultValue = "") String q, HttpServletResponse httpResponse) {
-        if (q.isBlank()) {
-            try {
-                log.info("Redirecting search to all users");
-                httpResponse.sendRedirect("/");
-            } catch (IOException e) {
-                throw new BadRequestException("No search param provided");
-            }
-        }
-
-        return accountOps.get_accounts(q);
+    List<Account> get_users(@RequestParam(defaultValue = "", required = false) String q) {
+        return q.isBlank() ? accountOps.get_accounts() : accountOps.get_accounts(q);
     }
 
     @GetMapping("/suggestions")
