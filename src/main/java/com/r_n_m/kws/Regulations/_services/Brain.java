@@ -5,7 +5,10 @@ import com.google.gson.JsonParser;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.r_n_m.kws.Regulations._entities.Account;
+import com.r_n_m.kws.Regulations._entities.Visit;
+import com.r_n_m.kws.Regulations._enum.Session;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
+import com.r_n_m.kws.Regulations._interface.VisitOps;
 import com.r_n_m.kws.Regulations._models.Forms;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -20,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -33,12 +37,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class Brain implements AccountOps {
+public class Brain implements AccountOps, VisitOps {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
-
+    //ACCOUNTS
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final var account = get_account(username);
@@ -246,4 +250,29 @@ public class Brain implements AccountOps {
         return false;
     }
 
+    //VISITS
+    @Override
+    public Visit create_visit() {
+        return null;
+    }
+
+    @Override
+    public List<Visit> get_visits() {
+        return null;
+    }
+
+    @Override
+    public List<Visit> get_visits(Session session) {
+        return null;
+    }
+
+    @Override
+    public List<Visit> get_visits(String param) {
+        return null;
+    }
+
+    @Override
+    public List<Visit> get_visits(Timestamp from, Timestamp to) {
+        return null;
+    }
 }
