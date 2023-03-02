@@ -110,6 +110,27 @@ public class AccountCtrl extends Assistant {
         return account;
     }
 
+    @PostMapping(path = "/approve", params = "user", consumes = MediaType.APPLICATION_JSON_VALUE)
+    void update_authorization(@RequestParam String user) {
+        var account = accountOps.get_user(user);
+        if (account == null) {
+            throw new NotFoundException("No such user found");
+        }
+
+        final var auth = new Forms.Auth(account.getUsername(), true);
+        if (!account.isAuthorised()) {
+            if (!accountOps.update_authorization_status(auth)) {
+                throw new FailureException("Unable to allow the user to be authorised");
+            }
+        }
+        if (!account.isAuthenticated()) {
+            if (!accountOps.update_authentication_status(auth)) {
+                throw new FailureException("Unable to allow the user to be authenticated");
+            }
+        }
+    }
+
+    @Deprecated
     @PostMapping(path = "/authorization", consumes = MediaType.APPLICATION_JSON_VALUE)
     void update_authorization(@RequestBody Forms.Auth authForm) {
         log.info("body = {}", authForm);
@@ -164,6 +185,11 @@ public class AccountCtrl extends Assistant {
     @GetMapping("/suggestions")
     Set<String> search_suggestions() {
         return accountOps.get_account_search_suggestions();
+    }
+
+    @GetMapping("/roles")
+    List<Role> get_roles() {
+        return Arrays.stream(Role.values()).toList();
     }
 
 }

@@ -35,8 +35,14 @@ public class Account {
     private String username;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    /**
+     * When true, the user can log in, otherwise it's impossible
+     */
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean isAuthenticated;
+    /**
+     * Set to true when the user is approved by an admin
+     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean isAuthorised;
 
