@@ -7,7 +7,7 @@ This is spring boot 3.0 microservice project which uses Mongo DB as its datasour
 ### Database
 The database name is **kws_regulations_sys** which is **secured** with the **developer** & **kwsClient** roles.
 
-![Database](https://user-images.githubusercontent.com/54445311/219361705-3f114b6d-d60d-4f50-b0ba-65b9b8144c49.png)
+![Database](https://user-images.githubusercontent.com/54445311/222440946-545a440e-c41d-4548-bdb5-0c0c555e599e.png)
 
 The following is a description for the collections existing in the database as of now.
 
@@ -113,3 +113,16 @@ The following is the accurate description of **validation rules** used.
 }
 ````
 
+### 2. logs
+Records of http listener audit events.
+
+Expected document entry.
+![Documents](https://user-images.githubusercontent.com/54445311/222441941-36433d03-d4ab-4a81-869d-ed4a565a7d8e.png)
+
+
+Indexes used.
+![Index](https://user-images.githubusercontent.com/54445311/222442111-47b88292-2409-426a-ad7a-71e8820c722d.png)
+
+
+### 3. Visits
+Records of customers who have visited the park.
