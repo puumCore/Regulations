@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -22,7 +22,7 @@ public class Visit {
     @Id
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private UUID visitId;
-    private Timestamp timestamp;
+    private Date timestamp;
     private Session session;
     private String plates;
     private int passengers;

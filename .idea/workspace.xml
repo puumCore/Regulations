@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Working on visits">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Visits: CRUD">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AuthCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AuthCtrl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/VisitCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/VisitCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/UUIDGenerators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/UUIDGenerators.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/Assistant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/Assistant.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Visit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Visit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_interface/VisitOps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_interface/VisitOps.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_services/Brain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_services/Brain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +64,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -183,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677763339972</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Visits: CRUD">
+      <created>1678082651089</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1678082651089</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,7 +205,8 @@
     <MESSAGE value="Updated Accounts Functionality" />
     <MESSAGE value="Completed Accounts functionalities." />
     <MESSAGE value="Working on visits" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working on visits" />
+    <MESSAGE value="Visits: CRUD" />
+    <option name="LAST_COMMIT_MESSAGE" value="Visits: CRUD" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

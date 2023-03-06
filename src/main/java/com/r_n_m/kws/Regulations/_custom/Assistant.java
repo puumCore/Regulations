@@ -32,10 +32,10 @@ import java.util.stream.IntStream;
 
 public abstract class Assistant {
 
-    public static final Integer BIRTH_YEAR = 2022;
+    public static final Integer BIRTH_YEAR = 2023;
     public static final ConcurrentHashMap<String, LocalDateTime> ONLINE_USERS = new ConcurrentHashMap<>();
     public final Clock clock = Clock.system(ZoneId.of("Africa/Nairobi"));
-    protected final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+    protected final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MMM-dd");
     private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("Africa/Nairobi")));
 
 
@@ -212,9 +212,6 @@ public abstract class Assistant {
         return DateFormatUtils.format(DateUtils.asDate(ZonedDateTime.ofInstant(timestamp.toInstant(), clock.getZone()).toLocalDateTime()), "yyyy-MMM-dd HH:mm:ss");
     }
 
-    protected final String get_date_alt() {
-        return new SimpleDateFormat("dd-MMM-yyyy").format(calendar.getTime());
-    }
 
     protected final String date() {
         return new SimpleDateFormat("dd").format(calendar.getTime());

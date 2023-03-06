@@ -10,6 +10,7 @@ import com.r_n_m.kws.Regulations._exception.FailureException;
 import com.r_n_m.kws.Regulations._exception.NotFoundException;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
 import com.r_n_m.kws.Regulations._interface.VisitOps;
+import com.r_n_m.kws.Regulations._util.DateUtils;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "visit", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -76,11 +77,50 @@ public class VisitCtrl extends Assistant {
             throw new BadRequestException("The user account information does not match those provided, kindly ensure they match and retry");
         }
 
-
         if (visitOps.create_visit(visit) == null) {
             throw new FailureException("Failed to record the provided visit");
         }
+    }
 
+
+    @GetMapping
+    List<Visit> get_list(@RequestParam(required = false, defaultValue = "") String session, @RequestParam(required = false, defaultValue = "") String param) {
+        if (!session.isBlank()) {
+            var selectedSession = Arrays.stream(Session.values()).filter(session1 -> session1.name().equals(session)).findFirst().orElse(null);
+            if (selectedSession != null) {
+                return visitOps.get_visits(selectedSession);
+            }
+        } else if (!param.isBlank()) {
+            return visitOps.get_visits(param);
+        }
+
+        return visitOps.get_visits();
+    }
+
+    @GetMapping("/timeline")
+    List<Visit> get_list_within_timeline(@RequestParam String from, @RequestParam(required = false, defaultValue = "") String to) {
+        if (the_date_format_is_NOT_acceptable(from)) {
+            throw new BadRequestException("The \"from\" date is not in the correct format");
+        }
+        if (to.isBlank()) {
+            to = get_date();
+        } else {
+            if (the_date_format_is_NOT_acceptable(to)) {
+                throw new BadRequestException("The \"to\" date is not in the correct format");
+            }
+        }
+
+        final List<Visit> visitList;
+        try {
+            var beginLocalDate = LocalDate.parse(from, dateTimeFormatter);
+            var endLocalDate = LocalDate.parse(to, dateTimeFormatter);
+            log.info("from = {}, to = {}", from, to);
+            visitList = new ArrayList<>(visitOps.get_visits(DateUtils.asDate(beginLocalDate.atStartOfDay()), DateUtils.asDate(endLocalDate.atTime(23, 59))));
+        } catch (Exception e) {
+            throw new BadRequestException("The dates provided seem to conflict with the system logic", e);
+        }
+
+        return visitList;
     }
 
 }

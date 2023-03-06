@@ -6,6 +6,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.r_n_m.kws.Regulations._entities.Account;
 import com.r_n_m.kws.Regulations._entities.Visit;
+import com.r_n_m.kws.Regulations._enum.Role;
 import com.r_n_m.kws.Regulations._enum.Session;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
 import com.r_n_m.kws.Regulations._interface.VisitOps;
@@ -23,7 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -268,7 +268,7 @@ public class Brain implements AccountOps, VisitOps {
         } catch (Exception e) {
             log.error("Failed to get visits", e);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -278,18 +278,64 @@ public class Brain implements AccountOps, VisitOps {
             query.addCriteria(Criteria.where("session").is(session));
             return mongoTemplate.find(query, Visit.class);
         } catch (Exception e) {
-            log.error("Failed to get visits", e);
+            log.error("Failed to get visits based on session", e);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public List<Visit> get_visits(String param) {
-        return null;
+        try {
+            var criteria = new Criteria();
+            var containsPattern = Pattern.compile("%s(?i)".formatted(param));
+            criteria.orOperator(
+                    Criteria.where("plates").regex(containsPattern),
+                    Criteria.where("phone").regex(containsPattern),
+                    Criteria.where("account.name").regex(containsPattern),
+                    Criteria.where("account.phone").regex(containsPattern),
+                    Criteria.where("account.role").regex(containsPattern),
+                    Criteria.where("account.username").regex(containsPattern)
+            );
+            return mongoTemplate.find(new Query(criteria), Visit.class);
+        } catch (Exception e) {
+            log.error("Failed to get visits based on param", e);
+        }
+        return new ArrayList<>();
     }
 
     @Override
-    public List<Visit> get_visits(Timestamp from, Timestamp to) {
-        return null;
+    public List<Visit> get_visits(Date from, Date to) {
+        final List<Visit> visitList = new ArrayList<>();
+        try {
+            Bson filter = new Document("timestamp", new Document("$gte", from).append("$lte", to));
+            mongoTemplate.getCollection(Visit.collection)
+                    .find(filter)
+                    .map(document -> {
+                        var visit = new Visit();
+                        visit.setVisitId(document.get("_id", UUID.class));
+                        visit.setTimestamp(document.getDate("timestamp"));
+                        visit.setSession(Session.valueOf(document.getString("session")));
+                        visit.setPlates(document.getString("plates"));
+                        visit.setPassengers(document.getInteger("passengers"));
+                        visit.setPhone(document.getString("phone"));
+
+                        var accountDoc = document.get("account", Document.class);
+                        var account = new Account();
+                        account.setName(accountDoc.getString("name"));
+                        account.setPhone(accountDoc.getString("phone"));
+                        account.setRole(Role.valueOf(accountDoc.getString("role")));
+                        account.setUsername(accountDoc.getString("username"));
+                        account.setAuthorised(true);
+                        account.setAuthorised(false);
+                        visit.setAccount(account);
+
+                        return visit;
+                    })
+                    .forEach(visitList::add);
+        } catch (Exception e) {
+            log.error("Failed to get visits based on timeline", e);
+        }
+        return visitList;
     }
+
 }
