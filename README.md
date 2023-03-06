@@ -1,8 +1,8 @@
 # Regulations
- This is a regulations infomation management system for the KWS.
+ This is a regulations information management system for the KWS.
 
 ## Details
-This is spring boot 3.0 microservice project which uses Mongo DB as its datasource.
+This is spring boot 3.0 microservice project which uses MongoDB as its datasource.
 
 ### Database
 The database name is **kws_regulations_sys** which is **secured** with the **developer** & **kwsClient** roles.
@@ -55,6 +55,12 @@ The following is the accurate description of **validation rules** used.
           'PATROL'
         ],
         description: 'Valid roles are Admin, Gate & Patrol. Check with developer on this'
+      },
+      username: {
+        bsonType: 'string'
+      },
+      password: {
+        bsonType: 'string'
       },
       isAuthenticated: {
         bsonType: 'bool',
@@ -126,3 +132,117 @@ Indexes used.
 
 ### 3. Visits
 Records of customers who have visited the park.
+
+Validation rules used.
+![Validation](https://user-images.githubusercontent.com/54445311/219362125-a4806375-af37-43d7-b3c8-13f9192e1c45.png)
+
+The following is the accurate description of **validation rules** used.
+
+``` js
+{
+  $jsonSchema: {
+    bsonType: 'object',
+    required: [
+      'timestamp',
+      'session',
+      'plates',
+      'passengers',
+      'phone',
+      'account'
+    ],
+    properties: {
+      timestamp: {
+        bsonType: 'date'
+      },
+      session: {
+        bsonType: 'string',
+        'enum': [
+          'MORNING',
+          'EVENING',
+          'FULL_DAY'
+        ],
+        description: 'Valid sessions are Morning, Evening & Full day. Check with developer on this'
+      },
+      plates: {
+        bsonType: 'string'
+      },
+      passengers: {
+        bsonType: 'int'
+      },
+      phone: {
+        bsonType: 'string',
+        description: 'The phone number should be a string'
+      },
+      account: {
+        bsonType: 'object',
+        required: [
+          'name',
+          'phone',
+          'role',
+          'username'
+        ],
+        properties: {
+          name: {
+            bsonType: 'string',
+            description: 'The fullname should be a string'
+          },
+          phone: {
+            bsonType: 'string',
+            description: 'The phone number should be a string'
+          },
+          role: {
+            bsonType: 'string',
+            'enum': [
+              'ADMIN',
+              'GATE',
+              'PATROL'
+            ],
+            description: 'Valid roles are Admin, Gate & Patrol. Check with developer on this'
+          },
+          username: {
+            bsonType: 'string'
+          }
+        }
+      }
+    }
+  },
+  $and: [
+    {
+      timestamp: {
+        $nin: [
+          null
+        ]
+      },
+      session: {
+        $nin: [
+          null,
+          ''
+        ]
+      },
+      plates: {
+        $nin: [
+          null,
+          ''
+        ]
+      },
+      passengers: {
+        $nin: [
+          null
+        ],
+        $gt: 0
+      },
+      phone: {
+        $nin: [
+          null,
+          ''
+        ]
+      },
+      account: {
+        $nin: [
+          null
+        ]
+      }
+    }
+  ]
+}
+````

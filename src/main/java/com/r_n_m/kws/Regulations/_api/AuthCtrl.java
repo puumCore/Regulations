@@ -35,7 +35,7 @@ public class AuthCtrl {
     void self_registration(@RequestBody Account account) {
         log.info("body = {}", account);
 
-        final var warning = account.get_warning();
+        final var warning = account.get_warning(true);
         if (warning != null) {
             throw new BadRequestException(warning);
         }
@@ -58,7 +58,7 @@ public class AuthCtrl {
     public void add_first_user(@RequestBody Account account) {
         log.info("body = {}", account);
 
-        final var warning = account.get_warning();
+        final var warning = account.get_warning(true);
         if (warning != null) {
             throw new BadRequestException(warning);
         }

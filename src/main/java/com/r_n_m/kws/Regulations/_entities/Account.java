@@ -47,7 +47,7 @@ public class Account {
     private boolean isAuthorised;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public final String get_warning() {
+    public final String get_warning(boolean advanced) {
         if (this.getName() == null || this.getName().isBlank()) {
             return "Please provide the name of the account holder then retry.";
         }
@@ -60,8 +60,10 @@ public class Account {
         if (this.getUsername() == null || this.getUsername().isBlank()) {
             return "Please provide the username of the account holder then retry.";
         }
-        if (this.getPassword() == null || this.getPassword().isBlank()) {
-            return "Please provide the password of the account holder then retry.";
+        if (advanced) {
+            if (this.getPassword() == null || this.getPassword().isBlank()) {
+                return "Please provide the password of the account holder then retry.";
+            }
         }
         return null;
     }

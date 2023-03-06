@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Working on visits" />
+    <list default="true" id="58ac54bd-63fd-44c5-a4f2-eadbb0d512ab" name="Default" comment="Working on visits">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AuthCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/AuthCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/VisitCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_api/VisitCtrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/UUIDGenerators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_custom/UUIDGenerators.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Visit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_entities/Visit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_interface/VisitOps.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_interface/VisitOps.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_services/Brain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/_services/Brain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/r_n_m/kws/Regulations/security/SecurityConfig.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,18 +79,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/puumI/OneDrive/Documents/GitHub/Regulations",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/puumI/OneDrive/Documents/GitHub/Regulations&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.r_n_m.kws.Regulations._interface._pagination" />
@@ -164,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677763268467</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Working on visits">
+      <created>1677763339972</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1677763339972</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

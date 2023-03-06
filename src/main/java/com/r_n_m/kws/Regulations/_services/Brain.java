@@ -252,17 +252,34 @@ public class Brain implements AccountOps, VisitOps {
 
     //VISITS
     @Override
-    public Visit create_visit() {
+    public Visit create_visit(Visit visit) {
+        try {
+            return mongoTemplate.save(visit);
+        } catch (Exception e) {
+            log.error("Failed to create visit", e);
+        }
         return null;
     }
 
     @Override
     public List<Visit> get_visits() {
+        try {
+            return mongoTemplate.findAll(Visit.class);
+        } catch (Exception e) {
+            log.error("Failed to get visits", e);
+        }
         return null;
     }
 
     @Override
     public List<Visit> get_visits(Session session) {
+        try {
+            var query = new Query();
+            query.addCriteria(Criteria.where("session").is(session));
+            return mongoTemplate.find(query, Visit.class);
+        } catch (Exception e) {
+            log.error("Failed to get visits", e);
+        }
         return null;
     }
 

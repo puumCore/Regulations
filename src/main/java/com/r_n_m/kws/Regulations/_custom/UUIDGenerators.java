@@ -17,8 +17,8 @@ public class UUIDGenerators extends Assistant {
     @Bean
     public BeforeConvertCallback<Visit> beforeVisitSaveCallback() {
         return (entity, collection) -> {
-            if (entity.getEntryId() == null) {
-                entity.setEntryId(UUID.randomUUID());
+            if (entity.getVisitId() == null) {
+                entity.setVisitId(UUID.randomUUID());
             }
             if (entity.getTimestamp() == null) {
                 entity.setTimestamp(Timestamp.from(Instant.now(clock)));

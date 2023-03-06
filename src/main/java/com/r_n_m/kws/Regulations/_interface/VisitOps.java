@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface VisitOps {
 
-    Visit create_visit();
+    Visit create_visit(Visit visit);
 
     List<Visit> get_visits();
 

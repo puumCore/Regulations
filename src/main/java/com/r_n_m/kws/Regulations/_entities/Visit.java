@@ -21,13 +21,33 @@ public class Visit {
 
     @Id
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private UUID entryId;
+    private UUID visitId;
     private Timestamp timestamp;
     private Session session;
     private String plates;
     private int passengers;
     private String phone;
     private Account account;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public final String get_warning() {
+        if (this.getSession() == null) {
+            return "Please provide the visiting session then retry.";
+        }
+        if (this.getPlates() == null || this.getPlates().isBlank()) {
+            return "Please provide the vehicle plates then retry.";
+        }
+        if (this.getPassengers() < 1) {
+            return "Please provide the correct number of passengers then retry.";
+        }
+        if (this.getPhone() == null || this.getPhone().isBlank()) {
+            return "Please provide the phone number of the account holder then retry.";
+        }
+        if (this.getAccount() == null) {
+            return "Please provide the information of the account information of the user providing this information then retry.";
+        }
+        return this.getAccount().get_warning(false);
+    }
 
     @Override
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -36,7 +56,7 @@ public class Visit {
         if (!(o instanceof Visit visit)) return false;
 
         if (getPassengers() != visit.getPassengers()) return false;
-        if (getEntryId() != null ? !getEntryId().equals(visit.getEntryId()) : visit.getEntryId() != null) return false;
+        if (getVisitId() != null ? !getVisitId().equals(visit.getVisitId()) : visit.getVisitId() != null) return false;
         if (getTimestamp() != null ? !getTimestamp().equals(visit.getTimestamp()) : visit.getTimestamp() != null)
             return false;
         if (getSession() != visit.getSession()) return false;
@@ -48,7 +68,7 @@ public class Visit {
     @Override
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public int hashCode() {
-        int result = getEntryId() != null ? getEntryId().hashCode() : 0;
+        int result = getVisitId() != null ? getVisitId().hashCode() : 0;
         result = 31 * result + (getTimestamp() != null ? getTimestamp().hashCode() : 0);
         result = 31 * result + (getSession() != null ? getSession().hashCode() : 0);
         result = 31 * result + (getPlates() != null ? getPlates().hashCode() : 0);
