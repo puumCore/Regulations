@@ -133,8 +133,11 @@ Indexes used.
 ### 3. Visits
 Records of customers who have visited the park.
 
+Expected document entry.
+![Documents](https://user-images.githubusercontent.com/54445311/223031512-5428e6c3-e2ff-4503-adee-07daccb99ee7.png)
+
 Validation rules used.
-![Validation](https://user-images.githubusercontent.com/54445311/219362125-a4806375-af37-43d7-b3c8-13f9192e1c45.png)
+![Validation](https://user-images.githubusercontent.com/54445311/223031411-0416da42-5b43-4fd8-9e39-bb8b7bb05187.png)
 
 The following is the accurate description of **validation rules** used.
 
