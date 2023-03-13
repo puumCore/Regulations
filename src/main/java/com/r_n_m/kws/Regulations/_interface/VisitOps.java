@@ -14,8 +14,11 @@ public interface VisitOps {
 
     List<Visit> get_visits(Session session);
 
+    List<Visit> get_visits(Session session, String param);
+
     List<Visit> get_visits(String param);
 
     List<Visit> get_visits(Date from, Date to);
+
 
 }

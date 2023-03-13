@@ -4,11 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import com.r_n_m.kws.Regulations._custom.Assistant;
 import com.r_n_m.kws.Regulations._entities.Account;
+import com.r_n_m.kws.Regulations._entities.OneTimePassword;
 import com.r_n_m.kws.Regulations._entities.Visit;
 import com.r_n_m.kws.Regulations._enum.Role;
 import com.r_n_m.kws.Regulations._enum.Session;
 import com.r_n_m.kws.Regulations._interface.AccountOps;
+import com.r_n_m.kws.Regulations._interface.OneTimePasswordOps;
 import com.r_n_m.kws.Regulations._interface.VisitOps;
 import com.r_n_m.kws.Regulations._models.Forms;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -37,7 +42,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class Brain implements AccountOps, VisitOps {
+public class Brain extends Assistant implements AccountOps, VisitOps, OneTimePasswordOps {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -284,6 +289,29 @@ public class Brain implements AccountOps, VisitOps {
     }
 
     @Override
+    public List<Visit> get_visits(Session session, String param) {
+        try {
+            var query = new Query();
+            query.addCriteria(Criteria.where("session").is(session));
+            var criteria = new Criteria();
+            var containsPattern = Pattern.compile("%s(?i)".formatted(param));
+            criteria.orOperator(
+                    Criteria.where("plates").regex(containsPattern),
+                    Criteria.where("phone").regex(containsPattern),
+                    Criteria.where("account.name").regex(containsPattern),
+                    Criteria.where("account.phone").regex(containsPattern),
+                    Criteria.where("account.role").regex(containsPattern),
+                    Criteria.where("account.username").regex(containsPattern)
+            );
+            query.addCriteria(criteria);
+            return mongoTemplate.find(query, Visit.class);
+        } catch (Exception e) {
+            log.error("Failed to get visits per session with a parameter", e);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<Visit> get_visits(String param) {
         try {
             var criteria = new Criteria();
@@ -338,4 +366,63 @@ public class Brain implements AccountOps, VisitOps {
         return visitList;
     }
 
+    @Override
+    public OneTimePassword create_OTP(UUID accountId) {
+        final var oneTimePassword = new OneTimePassword(generate_OTP_code().get(), accountId);
+        try {
+            return mongoTemplate.save(oneTimePassword);
+        } catch (Exception e) {
+            log.error("Failed to save a created OTP", e);
+        }
+        return null;
+    }
+
+    /**
+     * This obtains the token with the provided parameters including checking if it's within the 10seconds allowance to use the token.
+     *
+     * @param code      User provided OTP
+     * @param accountId User account
+     * @return Valid OTP otherwise null
+     */
+    @Override
+    public OneTimePassword get_OTP(Integer code, UUID accountId) {
+        try {
+            var criteria = new Criteria();
+            criteria.andOperator(
+                    Criteria.where("deactivated").is(false),
+                    Criteria.where("passwordCode").is(code),
+                    Criteria.where("accountId").is(accountId)
+            );
+            return mongoTemplate.findOne(new Query(criteria), OneTimePassword.class);
+        } catch (Exception e) {
+            log.error("Failed to get the requested OTP", e);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean deactivate_used_OTP(OneTimePassword otp) {
+        try {
+            otp.setDeactivated(true);
+            return mongoTemplate.findAndReplace(new Query(Criteria.where("_id").is(otp.getOtpId())), otp) != null;
+        } catch (Exception e) {
+            log.error("Failed to update authorization account", e);
+        }
+        return false;
+    }
+
+    @Override
+    public Integer get_deactivated_OTPs() {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        var otpList = mongoTemplate.find(new Query(Criteria.where("deactivated").is(false)), OneTimePassword.class);
+        otpList.forEach(oneTimePassword -> {
+            var secondsElapsed = calculate_days_between_given_dates(oneTimePassword.getExpiry(), new Date(), ChronoUnit.SECONDS);
+            if (secondsElapsed > 60) {
+                if (deactivate_used_OTP(oneTimePassword)) {
+                    atomicInteger.addAndGet(1);
+                }
+            }
+        });
+        return atomicInteger.get();
+    }
 }

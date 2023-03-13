@@ -88,7 +88,11 @@ public class VisitCtrl extends Assistant {
         if (!session.isBlank()) {
             var selectedSession = Arrays.stream(Session.values()).filter(session1 -> session1.name().equals(session)).findFirst().orElse(null);
             if (selectedSession != null) {
-                return visitOps.get_visits(selectedSession);
+                if (!param.isBlank()) {
+                    return visitOps.get_visits(selectedSession, param);
+                } else {
+                    return visitOps.get_visits(selectedSession);
+                }
             }
         } else if (!param.isBlank()) {
             return visitOps.get_visits(param);
