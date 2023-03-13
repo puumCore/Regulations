@@ -7,11 +7,12 @@ This is spring boot 3.0 microservice project which uses MongoDB as its datasourc
 ### Database
 The database name is **kws_regulations_sys** which is **secured** with the **developer** & **kwsClient** roles.
 
-![Database](https://user-images.githubusercontent.com/54445311/222440946-545a440e-c41d-4548-bdb5-0c0c555e599e.png)
+![Database](https://user-images.githubusercontent.com/54445311/224743862-b5cb1516-ffb5-473d-ae5a-3a2f711ec1cd.png)
+
 
 The following is a description for the collections existing in the database as of now.
 
-### 1. accounts
+### 1. Accounts
 Primary use is for IAM features.
 
 Expected document entry.
@@ -119,7 +120,7 @@ The following is the accurate description of **validation rules** used.
 }
 ````
 
-### 2. logs
+### 2. Logs
 Records of http listener audit events.
 
 Expected document entry.
@@ -241,6 +242,68 @@ The following is the accurate description of **validation rules** used.
         ]
       },
       account: {
+        $nin: [
+          null
+        ]
+      }
+    }
+  ]
+}
+````
+
+### 4. One Time Passwords (OTP)
+Records of generated OTPS with the user to whom it was generated for.
+
+Expected document entry.
+![Document](https://user-images.githubusercontent.com/54445311/224743085-bb599bb9-3d20-4ce5-bfe4-51f1ed826251.png)
+
+Validation rules used.
+![Validation](https://user-images.githubusercontent.com/54445311/224743224-9f62e866-26a5-48b4-8a49-bfc5d6206ea9.png)
+
+The following is the accurate description of **validation rules** used
+``` js
+{
+  $jsonSchema: {
+    required: [
+      'passwordCode',
+      'accountId',
+      'expiry',
+      'deactivated'
+    ],
+    properties: {
+      passwordCode: {
+        bsonType: 'int'
+      },
+      accountId: {
+        bsonType: 'binData'
+      },
+      expiry: {
+        bsonType: 'date'
+      },
+      deactivated: {
+        bsonType: 'bool'
+      }
+    }
+  },
+  $and: [
+    {
+      passwordCode: {
+        $nin: [
+          0,
+          null
+        ]
+      },
+      accountId: {
+        $nin: [
+          null
+        ]
+      },
+      expiry: {
+        $nin: [
+          null
+        ]
+      },
+      deactivated: {
         $nin: [
           null
         ]
