@@ -1,5 +1,5 @@
 # Regulations
- This is a regulations information management system for the KWS.
+A way for visitors to the national park with KWS parks rules & regulations including a map of the park.
 
 ## Details
 This is spring boot 3.0 microservice project which uses MongoDB as its datasource.
