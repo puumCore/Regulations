@@ -2,6 +2,8 @@
 A way for visitors to the national park with KWS parks rules & regulations including a map of the park.
 
 ## Details
+> Please note that the information here is purely technical!
+
 This is spring boot 3.0 microservice project which uses MongoDB as its datasource.
 
 ### Database
